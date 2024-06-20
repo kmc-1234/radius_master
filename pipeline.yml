@@ -1,0 +1,20 @@
+name: Natlogs Pipeline
+
+on:
+  push:
+    branches: [ "mikrotik-x64", "dockerregistry" ]
+
+jobs:
+  app_build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build docker image
+      run: docker build -t docker.soumyahome.in/natlogs:mikrotik-x64 .
+    - name: docker login
+      run: docker login docker.soumyahome.in -u ${{ secrets.REGISTRYDOCKER_USERNAME }} -p ${{ secrets.REGISTRYDOCKER_PASSWD }}
+    - name: Push docker image
+      run: docker push docker.soumyahome.in/natlogs:mikrotik-x64
+
+
